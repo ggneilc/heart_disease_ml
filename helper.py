@@ -24,7 +24,7 @@ def load_features(filepath, features=["age", "sex", "resting bp s"], target=["ta
     return features, labels
 
 def split_data(features, labels):
-    """ Create training and testing data set. """
+    """ Create training (75%) and testing (25%) data set  """
     cutoff = math.floor(float(len(features)) * 0.75)
     trainX = features[:cutoff]
     testX = features[cutoff:]
