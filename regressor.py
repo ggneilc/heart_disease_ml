@@ -29,7 +29,11 @@ class Regressor():
         '''
         residual = (y - (X @ self.weights))
         rss = residual.T @ residual
-        print(f"RSS:\t\t{(rss[0,0])}\nsqrt(RSS):\t{math.sqrt(rss)}")
+        print(f"RSS:\t{(rss[0,0])}")
+        tss = np.sum((y - np.mean(y)) ** 2)
+        r2_manual = 1 - (rss / tss)
+        print(f"R^2:\t{r2_manual[0,0]}")
+        return rss[0,0], r2_manual[0,0]
 
 # TODO --- create oop plots with nice animations for each step --- 
 # --- this will make it easier to compare every step of each model ---
@@ -55,7 +59,7 @@ class Regressor():
 
         model = Regressor()
         model.fit(X, trainY)
-        model.accuracy(X, trainY)
+        rss, r2 = model.accuracy(X, trainY)
 
         # plot cholestrol vs resting bp
         Z = model.predict(X)
@@ -67,39 +71,28 @@ class Regressor():
             plt.plot(X[:, 1], Z, color="red", linestyle="-", linewidth=2, label="Regression Line")
             plt.xlabel("Cholestrol")
             plt.ylabel("Resting Blood Pressure")
+            text = f"Accuracy (R²): {r2:.3f}\nRSS: {rss:.3f}"
+            plt.text(min(X[:,1]), max(trainY), text, fontsize=12, verticalalignment='top', bbox=dict(facecolor='white', alpha=0.7))
+            plt.legend()
             pdf.savefig()
             plt.clf()
 
-            #---plotting for 3d features [age, sex, cholestrol]
-            # Create a grid of points for visualization
-            # x1_grid = np.linspace(X[:, 1].min(), X[:, 1].max(), 20)
-            # x2_grid = np.linspace(X[:, 2].min(), X[:, 2].max(), 20)
-            # xx1, xx2 = np.meshgrid(x1_grid, x2_grid)
-            # # Create grid with bias term for prediction
-            # X_grid = np.column_stack([np.ones(xx1.size), xx1.ravel(), xx2.ravel()])
+            #---plotting for 3d features [age, cholestrol] : [resting bp s]
+            cholerstrol_axis = np.linspace(0, max(X[:,1]), len(X))
+            age_axis = np.linspace(0, max(X[:,2]), len(X))
+            bias = np.ones(len(X))
+            reg_line = model.predict(np.c_[bias, cholerstrol_axis, age_axis])
 
-            # y_pred = model.predict(X_grid)
-            # y_pred_grid = y_pred.reshape(xx1.shape)
 
-            # # 3D Surface plot
-            # fig = plt.figure(figsize=(12, 8))
-            # ax = fig.add_subplot(111, projection='3d')
+            fig = plt.figure()
+            ax = fig.add_subplot(projection='3d')
 
-            # # Plot the actual data points
-            # ax.scatter(X[:, 1], X[:, 2], trainY, color='red', alpha=0.5, label='Actual data')
+            ax.scatter(X[:,1], X[:,2], trainY, color="blue", marker="o")
 
-            # # Plot the predicted surface
-            # surf = ax.plot_surface(xx1, xx2, y_pred_grid, cmap='viridis', alpha=0.8)
-
-            # # Add a color bar
-            # fig.colorbar(surf, ax=ax, shrink=0.5, aspect=5)
-
-            # # Label axes and add title
-            # ax.set_xlabel('Feature 1')
-            # ax.set_ylabel('Feature 2')
-            # ax.set_zlabel('Target')
-            # ax.set_title('Regression Model Output')
-            # ax.legend()
-
-            # plt.tight_layout()
-            # pdf.savefig()
+            ax.plot_surface(cholerstrol_axis, age_axis, reg_line)
+            
+            ax.set_xlabel("Cholestrol")
+            ax.set_ylabel("Age")
+            ax.set_zlabel("Blood Pressure")
+            ax.text(0,0,1, text, fontsize=12)
+            pdf.savefig()

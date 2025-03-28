@@ -8,16 +8,16 @@ from perceptron import Perceptron
 def main():
     data_path = "./heart_statlog_cleveland_hungary_final.csv"
 
-    features_regression = ["cholesterol"]
+    features_regression = ["cholesterol", "age"]
     target_regression = ["resting bp s"]
     r_features, r_labels = load_features(data_path, features=features_regression, target=target_regression, remove=True)
-    r_trainX, r_testX, r_trainY, r_testY = split_data(r_features, r_labels)
+    r_trainX, r_testX, r_trainY, r_testY = split_data(r_features, r_labels, reduce=True)
     Regressor.test_regressor(r_trainX, r_testX, r_trainY, r_testY)
 
     features_perceptron = ["resting bp s", "cholesterol"]
     target_perceptron = ["target"]
     p_features, p_labels = load_features(data_path, features=features_perceptron, target=target_perceptron, remove=False)
-    p_trainX, p_testX, p_trainY ,p_testY = split_data(p_features, p_labels)
+    p_trainX, p_testX, p_trainY, p_testY = split_data(p_features, p_labels, reduce=True)
     Perceptron.test_perceptron(p_trainX, p_testX, p_trainY, p_testY)
     
 
