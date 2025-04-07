@@ -26,16 +26,16 @@ def load_features(filepath, features=["age", "sex", "resting bp s"], target=["ta
 
 def split_data(features, labels, reduce=False):
     """ Create training (75%) and testing (25%) data set  """
-    if reduce: # trim sample to only 200 points
+    if reduce: # trim sample to only 100 points
         trainX = []
         trainY = []
         testX = []
         testY = []
-        for i in range(50):
+        for i in range(75):
             r = random.randint(0,len(features)-1)
             trainX.append(features[r])
             trainY.append(labels[r])
-        for i in range(15):
+        for i in range(25):
             r = random.randint(0,len(features)-1)
             testX.append(features[r])
             testY.append(labels[r])
