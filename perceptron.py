@@ -24,7 +24,9 @@ class Perceptron():
                     self.weights += y[i] * X[i]
                     errors += 1
             if errors == 0:
+                print("perfected perceptron")
                 break
+        
         
         return self.weights
 

@@ -46,5 +46,5 @@ def split_data(features, labels, reduce=False):
     testX = features[cutoff:]
     trainY = labels[:cutoff]
     testY = labels[cutoff:]
-    print(f"Observations, cutoff:\t{len(features)}, {cutoff}\nTrainX:\t{len(trainX)}\nTestX:\t{len(testX)}\nTrainY:\t{len(trainY)}\nTestY:\t{len(testY)}")
+#    print(f"Observations, cutoff:\t{len(features)}, {cutoff}\nTrainX:\t{len(trainX)}\nTestX:\t{len(testX)}\nTrainY:\t{len(trainY)}\nTestY:\t{len(testY)}")
     return trainX, testX, trainY, testY
